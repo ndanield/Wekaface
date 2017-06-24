@@ -10,45 +10,12 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="557.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<VBox xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
-      <HBox alignment="CENTER_LEFT" layoutX="13.0" layoutY="75.0" prefHeight="37.0" prefWidth="589.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="-2.0">
-         <children>
-            <Label prefHeight="23.0" prefWidth="250.0" text="Abrir archivo..." textAlignment="CENTER">
-               <padding>
-                  <Insets top="5.0" />
-               </padding>
-            </Label>
-            <JFXButton prefHeight="32.0" prefWidth="70.0" text="Open" textAlignment="CENTER">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </JFXButton>
-            <Label prefHeight="18.0" prefWidth="85.0" text="Algoritmo">
-               <HBox.margin>
-                  <Insets left="8.0" />
-               </HBox.margin>
-            </Label>
-            <JFXComboBox prefHeight="28.0" prefWidth="102.0" />
-            <JFXButton prefHeight="42.0" prefWidth="54.0" text="Apply" textAlignment="CENTER">
-               <HBox.margin>
-                  <Insets left="3.0" />
-               </HBox.margin>
-            </JFXButton>
-         </children>
-      </HBox>
-      <TableView layoutX="7.0" layoutY="123.0" prefHeight="154.0" prefWidth="589.0">
-        <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
-            <TableColumn prefWidth="75.0" text="C3" />
-        </columns>
-      </TableView>
-      <MenuBar layoutX="7.0" layoutY="14.0">
+      <MenuBar>
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
@@ -67,7 +34,39 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TextArea layoutX="7.0" layoutY="333.0" prefHeight="210.0" prefWidth="589.0" />
-      <Label layoutX="14.0" layoutY="315.0" text="Panel de Resultado" />
+      <HBox alignment="CENTER_LEFT" prefHeight="37.0" prefWidth="589.0">
+         <children>
+            <Label prefHeight="23.0" prefWidth="250.0" text="Open a dataset..." textAlignment="CENTER">
+               <padding>
+                  <Insets top="5.0" />
+               </padding>
+            </Label>
+            <JFXButton prefHeight="32.0" prefWidth="70.0" text="Open" textAlignment="CENTER">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </JFXButton>
+            <Label prefHeight="18.0" prefWidth="85.0" text="Algoritmo">
+               <HBox.margin>
+                  <Insets left="8.0" />
+               </HBox.margin>
+            </Label>
+            <JFXComboBox prefHeight="28.0" prefWidth="102.0" promptText="J48" />
+            <JFXButton prefHeight="42.0" prefWidth="54.0" text="Apply" textAlignment="CENTER">
+               <HBox.margin>
+                  <Insets left="3.0" />
+               </HBox.margin>
+            </JFXButton>
+         </children>
+      </HBox>
+      <TableView prefHeight="154.0" prefWidth="589.0">
+        <columns>
+          <TableColumn prefWidth="75.0" text="C1" />
+          <TableColumn prefWidth="75.0" text="C2" />
+            <TableColumn prefWidth="75.0" text="C3" />
+        </columns>
+      </TableView>
+      <Label text="Panel de Resultado" />
+      <TextArea editable="false" prefWidth="589.0" VBox.vgrow="ALWAYS" />
    </children>
-</AnchorPane>
+</VBox>
