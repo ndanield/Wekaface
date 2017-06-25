@@ -38,7 +38,7 @@
          <children>
             <Label prefHeight="23.0" prefWidth="250.0" text="Open a dataset..." textAlignment="CENTER">
                <padding>
-                  <Insets top="5.0" />
+                  <Insets left="6.0" top="5.0" />
                </padding>
             </Label>
             <JFXButton prefHeight="32.0" prefWidth="70.0" text="Open" textAlignment="CENTER">
@@ -52,7 +52,7 @@
                </HBox.margin>
             </Label>
             <JFXComboBox prefHeight="28.0" prefWidth="102.0" promptText="J48" />
-            <JFXButton prefHeight="42.0" prefWidth="54.0" text="Apply" textAlignment="CENTER">
+            <JFXButton fx:id="btnClasify" onAction="#handleButtonAction" prefHeight="42.0" prefWidth="54.0" text="Apply" textAlignment="CENTER">
                <HBox.margin>
                   <Insets left="3.0" />
                </HBox.margin>
@@ -67,6 +67,6 @@
         </columns>
       </TableView>
       <Label text="Panel de Resultado" />
-      <TextArea editable="false" prefWidth="589.0" VBox.vgrow="ALWAYS" />
+      <TextArea fx:id="resultArea" editable="false" prefWidth="589.0" VBox.vgrow="ALWAYS" />
    </children>
 </VBox>

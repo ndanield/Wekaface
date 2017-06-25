@@ -3,6 +3,7 @@ package sample;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import weka.core.Instances;
 import weka.core.Utils;
 import weka.core.converters.ConverterUtils.DataSource;
@@ -14,6 +15,9 @@ public class Controller {
 
     @FXML
     private Button btnClasify = new Button();
+
+    @FXML
+    private TextArea resultArea = new TextArea();
 
     @FXML
     private void handleButtonAction(ActionEvent e) {
@@ -35,6 +39,7 @@ public class Controller {
             data.setClassIndex(data.numAttributes() - 1);
 
         J48 tree = new J48();
+        tree.buildClassifier(data);
         Evaluation eval = new Evaluation(data);
         eval.crossValidateModel(tree, data, 10, new Random(1));
 
@@ -49,19 +54,10 @@ public class Controller {
 
         result.append(tree.toString() + "\n");
         result.append(eval.toSummaryString() + "\n");
-        try {
-            result.append(eval.toMatrixString() + "\n");
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            result.append(eval.toClassDetailsString() + "\n");
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        System.out.println(result.toString());
+        result.append(eval.toMatrixString() + "\n");
+        result.append(eval.toClassDetailsString() + "\n");
+
+        resultArea.setText(result.toString());
     }
 }
