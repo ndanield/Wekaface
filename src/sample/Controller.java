@@ -64,26 +64,32 @@ public class Controller implements Initializable{
         if (data.classIndex() == -1)
             data.setClassIndex(data.numAttributes() - 1);
 
-        /*
-        String atributosNewInst = "rainy,mild,high,FALSE,yes";
-        String [] atributos = atributosNewInst.split(",");
 
+        String [] atributos = {"rainy", "cool", "high", "FALSE", "yes"};
         Instance inst = new DenseInstance(data.numAttributes());
+
+        inst.setDataset(data);
         for (int i = 0; i < data.numAttributes(); i++) {
             inst.setValue(i, atributos[i]);
         }
         data.add(inst);
-        */
 
         J48 tree = new J48();
         tree.buildClassifier(data);
         Evaluation eval = new Evaluation(data);
         eval.crossValidateModel(tree, data, 10, new Random(1));
 
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < data.numInstances(); i++) {
+            double pred = tree.classifyInstance(data.instance(i));
+            result.append("No. " + (i+1) + "\n");
+            result.append(data.instance(i).toString() + "\n");
+            result.append("Valor predecido: " + data.classAttribute().value((int) pred) + "\n");
+            result.append("Valor real: " + data.classAttribute().value((int) data.instance(i).classValue()) + "\n\n");
+        }
 
-        StringBuffer        result;
-
-        result = new StringBuffer();
+        /*
+        StringBuilder       result = new StringBuilder();
         result.append("\n================================\nPrueeeeeeeeba\n===============================\n\n");
 
         result.append("Classifier...: " + tree.getClass().getName() +"\n");
@@ -91,9 +97,10 @@ public class Controller implements Initializable{
         result.append(tree.toString() + "\n");
         result.append(eval.toSummaryString() + "\n");
         result.append(eval.toMatrixString() + "\n");
-
+  */
 
         resultArea.setText(result.toString());
+
     }
 
     @Override
