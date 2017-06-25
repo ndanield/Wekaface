@@ -36,12 +36,12 @@
       </MenuBar>
       <HBox alignment="CENTER_LEFT" prefHeight="37.0" prefWidth="589.0">
          <children>
-            <Label prefHeight="23.0" prefWidth="250.0" text="Open a dataset..." textAlignment="CENTER">
+            <Label fx:id="lblOpenedFile" alignment="CENTER" prefHeight="23.0" prefWidth="250.0" text="Filename" textAlignment="CENTER" textFill="#616161">
                <padding>
-                  <Insets left="6.0" top="5.0" />
+                  <Insets left="6.0" />
                </padding>
             </Label>
-            <JFXButton prefHeight="32.0" prefWidth="70.0" text="Open" textAlignment="CENTER">
+            <JFXButton fx:id="btnOpen" onAction="#handleButtonOpen" prefHeight="32.0" prefWidth="70.0" text="Open" textAlignment="CENTER">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
@@ -52,7 +52,7 @@
                </HBox.margin>
             </Label>
             <JFXComboBox prefHeight="28.0" prefWidth="102.0" promptText="J48" />
-            <JFXButton fx:id="btnClasify" onAction="#handleButtonAction" prefHeight="42.0" prefWidth="54.0" text="Apply" textAlignment="CENTER">
+            <JFXButton fx:id="btnClassify" onAction="#handleButtonClassify" prefHeight="42.0" prefWidth="54.0" text="Apply" textAlignment="CENTER">
                <HBox.margin>
                   <Insets left="3.0" />
                </HBox.margin>
