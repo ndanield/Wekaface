@@ -87,7 +87,12 @@ public class Controller implements Initializable {
     private void handleButtonOpen() throws Exception {
         btnClassify.setDisable(false);
 //        btnAgregar.setDisable(false);
-
+        if (tableView.getColumns() != null) {
+            tableView.getColumns().clear();
+        }
+        if (tableView.getItems() != null) {
+            tableView.getItems().clear();
+        }
 
         File file = fileChooser.showOpenDialog(btnClassify.getScene().getWindow());
         txtFilepath.setText(file.getName());
