@@ -1,16 +1,15 @@
 package sample;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import weka.core.*;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.classifiers.trees.J48;
@@ -18,9 +17,7 @@ import weka.classifiers.Evaluation;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class Controller implements Initializable {
 
@@ -34,12 +31,12 @@ public class Controller implements Initializable {
     private TextArea resultArea = new TextArea();
 
     @FXML
+    private JFXTextField txtResult = new JFXTextField();
+
+    @FXML
     private Label lblOpenedFile = new Label();
 
     private final FileChooser fileChooser = new FileChooser();
-    private File file;
-
-    static String filePath;
 
     ObservableList tablemodel = FXCollections.observableArrayList();
 
@@ -64,26 +61,57 @@ public class Controller implements Initializable {
     private JFXTextField yesF;
 
     @FXML
-    private JFXTextField agregarF;
-
+    private JFXComboBox<String> cmbOutlook;
+    @FXML
+    private JFXComboBox<String> cmbTemperature;
+    @FXML
+    private JFXComboBox<String> cmbHumidity;
+    @FXML
+    private JFXComboBox<String> cmbWindy;
+    @FXML
+    private JFXComboBox<String> cmbPlay;
 
 
 
     @FXML
-    private void handleButtonOpen() {
+    private JFXButton btnAgregar;
+
+
+    private Instances data;
+
+    @FXML
+    private void handleButtonOpen() throws Exception {
         btnClassify.setDisable(false);
 
 
-        file = fileChooser.showOpenDialog(btnClassify.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(btnClassify.getScene().getWindow());
         lblOpenedFile.setText(file.getName());
-        filePath = file.getAbsolutePath();
+        String filePath = file.getAbsolutePath();
 
+        DataSource source = new DataSource(filePath);
+        data = source.getDataSet();
+
+        if (data.classIndex() == -1)
+            data.setClassIndex(data.numAttributes() - 1);
+
+        setComboBoxes(data);
+
+        for( int i = 0; i<data.numAttributes(); i++) {
+            final int finalIdx = i;
+            TableColumn<ObservableList<String>, String> column = new TableColumn<>(
+                    data.attribute(finalIdx).name()
+            );
+            column.setCellValueFactory(param ->
+                    new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx))
+            );
+            tableView.getColumns().add(column);
+        }
     }
 
     @FXML
     private void handleButtonClassify() {
         try {
-            classify(filePath);
+            classify(data);
         } catch (Exception e1) {
             e1.printStackTrace();
         }
@@ -91,48 +119,73 @@ public class Controller implements Initializable {
 
     @FXML
     private void handleButtonAgregar() {
-        try {
-            classify(filePath);
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
+//        ObservableList<String> attr = FXCollections.observableArrayList(
+//            rainyF.getText(),
+//            coolF.getText(),
+//            highF.getText(),
+//            falseF.getText(),
+//            yesF.getText()
+//        );
+        ObservableList<String> attr = FXCollections.observableArrayList(
+                cmbOutlook.getSelectionModel().getSelectedItem(),
+                cmbTemperature.getSelectionModel().getSelectedItem(),
+                cmbHumidity.getSelectionModel().getSelectedItem(),
+                cmbWindy.getSelectionModel().getSelectedItem(),
+                cmbPlay.getSelectionModel().getSelectedItem()
+        );
+//        ObservableList<String> attr = FXCollections.observableArrayList("rainy", "cool", "high", "FALSE", "yes");
+        tableView.getItems().add(attr);
     }
 
-    private void classify(String path) throws Exception {
+    private void classify(Instances data) throws Exception {
 
-
-        DataSource source = new DataSource(path);
-        Instances data = source.getDataSet();
         //tablemodel.add(data);
         //tableView.getItems().addAll(tablemodel);
 
 
-        if (data.classIndex() == -1)
-            data.setClassIndex(data.numAttributes() - 1);
+//        String[] atributos = {"rainy", "cool", "high", "FALSE", "yes"};
+//        String[] atributos = new String[data.numAttributes()];
 
+//        for(int i = 0; i < data.numAttributes(); i++){
+//            atributos[i] =
+//        }
 
-        String[] atributos = {"rainy", "cool", "high", "FALSE", "yes"};
+//        atributos[0] = rainyF.getText();
+//        atributos[1] = coolF.getText();
+//        atributos[2] = highF.getText();
+//        atributos[3] = falseF.getText();
+
+//        atributos[4] = yesF.getText();
+
+        ObservableList<String> attr = tableView.getSelectionModel().getSelectedItem();
         Instance inst = new DenseInstance(data.numAttributes());
 
         inst.setDataset(data);
         for (int i = 0; i < data.numAttributes(); i++) {
-            inst.setValue(i, atributos[i]);
+            inst.setValue(i, attr.get(i));
         }
         data.add(inst);
+
+
 
         J48 tree = new J48();
         tree.buildClassifier(data);
         Evaluation eval = new Evaluation(data);
         eval.crossValidateModel(tree, data, 10, new Random(1));
 
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < data.numInstances(); i++) {
-            double pred = tree.classifyInstance(data.instance(i));
-            result.append("No. " + (i + 1) + "\n");
-            result.append(data.instance(i).toString() + "\n");
-            result.append("Valor predecido: " + data.classAttribute().value((int) pred) + "\n");
-            result.append("Valor real: " + data.classAttribute().value((int) data.instance(i).classValue()) + "\n\n");
-        }
+        int last = data.numInstances()-1;
+        double pred = tree.classifyInstance(data.instance(last));
+        String result = "Valor predecido: " + data.classAttribute().value((int) pred) + "\n";
+
+
+//        StringBuilder result = new StringBuilder();
+//        for (int i = 0; i < data.numInstances(); i++) {
+//            double pred = tree.classifyInstance(data.instance(i));
+//            result.append("No. " + (i + 1) + "\n");
+//            result.append(data.instance(i).toString() + "\n");
+//            result.append("Valor predecido: " + data.classAttribute().value((int) pred) + "\n");
+//            result.append("Valor real: " + data.classAttribute().value((int) data.instance(i).classValue()) + "\n\n");
+//        }
 
         /*
         StringBuilder       result = new StringBuilder();
@@ -145,28 +198,39 @@ public class Controller implements Initializable {
         result.append(eval.toMatrixString() + "\n");
   */
 
-        resultArea.setText(result.toString());
-
-
-
-    for( int i = 0; i<data.numAttributes(); i++) {
-        final int finalIdx = i;
-        TableColumn<ObservableList<String>, String> column = new TableColumn<>(
-                data.attribute(finalIdx).name()
-        );
-        column.setCellValueFactory(param ->
-                new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx))
-        );
-        tableView.getColumns().add(column);
+//        resultArea.setText(result.toString());
+        txtResult.setText(result);
     }
 
+    private void setComboBoxes(Instances data) {
 
 
-}
+        Enumeration<Attribute> header = data.enumerateAttributes();
+        ArrayList<String[]> materiaPrima= new ArrayList<>();
+        while (header.hasMoreElements()){
+            Attribute a = header.nextElement();
+            String[] op = new String[a.numValues()];
+            for (int i = 0; i < a.numValues(); i++)
+                op[i] = a.value(i);
+            materiaPrima.add(op);
+        }
+
+
+        cmbOutlook.getItems().clear();
+        cmbTemperature.getItems().clear();
+        cmbHumidity.getItems().clear();
+        cmbWindy.getItems().clear();
+
+        cmbOutlook.getItems().addAll(materiaPrima.get(0));
+        cmbTemperature.getItems().addAll(materiaPrima.get(1));
+        cmbHumidity.getItems().addAll(materiaPrima.get(2));
+        cmbWindy.getItems().addAll(materiaPrima.get(3));
+        cmbPlay.getItems().addAll("yes","no");
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        btnClassify.setDisable(true);
+//        btnClassify.setDisable(false);
         //fileChooser.setInitialDirectory(new File("C:\\Users\\NelsonDaniel\\workspace\\Wekaface\\datasets"));
     }
 
