@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -85,7 +86,7 @@ public class Controller implements Initializable {
     @FXML
     private void handleButtonOpen() throws Exception {
         btnClassify.setDisable(false);
-        btnAgregar.setDisable(false);
+//        btnAgregar.setDisable(false);
 
 
         File file = fileChooser.showOpenDialog(btnClassify.getScene().getWindow());
@@ -99,11 +100,11 @@ public class Controller implements Initializable {
             data.setClassIndex(data.numAttributes() - 1);
 
         setComboBoxes(data);
-
-        for( int i = 0; i<data.numAttributes(); i++) {
-            final int finalIdx = i;
+        int index;
+        for(index = 0; index < data.numAttributes()+1; index++) {
+            final int finalIdx = index;
             TableColumn<ObservableList<String>, String> column = new TableColumn<>(
-                    data.attribute(finalIdx).name()
+                    (index != data.numAttributes()) ? data.attribute(finalIdx).name() : "Valor predicho"
             );
             column.setCellValueFactory(param ->
                     new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx))
@@ -116,20 +117,15 @@ public class Controller implements Initializable {
     private void handleButtonClassify() {
         try {
             classify(data);
-        } catch (Exception e1) {
-            e1.printStackTrace();
+        } catch (IllegalArgumentException e1) {
+            e1.getCause();
+        } catch (Exception e2) {
+            e2.printStackTrace();
         }
     }
 
     @FXML
     private void handleButtonAgregar() {
-//        ObservableList<String> attr = FXCollections.observableArrayList(
-//            rainyF.getText(),
-//            coolF.getText(),
-//            highF.getText(),
-//            falseF.getText(),
-//            yesF.getText()
-//        );
         ObservableList<String> attr = FXCollections.observableArrayList(
                 cmbOutlook.getSelectionModel().getSelectedItem(),
                 cmbTemperature.getSelectionModel().getSelectedItem(),
@@ -137,39 +133,28 @@ public class Controller implements Initializable {
                 cmbWindy.getSelectionModel().getSelectedItem(),
                 cmbPlay.getSelectionModel().getSelectedItem()
         );
-//        ObservableList<String> attr = FXCollections.observableArrayList("rainy", "cool", "high", "FALSE", "yes");
+
         tableView.getItems().add(attr);
     }
 
     private void classify(Instances data) throws Exception {
 
-        //tablemodel.add(data);
-        //tableView.getItems().addAll(tablemodel);
 
+//        ObservableList<String> attr = tableView.getSelectionModel().getSelectedItem();
+        ObservableList<String> attr = FXCollections.observableArrayList(
+                cmbOutlook.getSelectionModel().getSelectedItem(),
+                cmbTemperature.getSelectionModel().getSelectedItem(),
+                cmbHumidity.getSelectionModel().getSelectedItem(),
+                cmbWindy.getSelectionModel().getSelectedItem(),
+                cmbPlay.getSelectionModel().getSelectedItem()
+        );
 
-//        String[] atributos = {"rainy", "cool", "high", "FALSE", "yes"};
-//        String[] atributos = new String[data.numAttributes()];
-
-//        for(int i = 0; i < data.numAttributes(); i++){
-//            atributos[i] =
-//        }
-
-//        atributos[0] = rainyF.getText();
-//        atributos[1] = coolF.getText();
-//        atributos[2] = highF.getText();
-//        atributos[3] = falseF.getText();
-
-//        atributos[4] = yesF.getText();
-
-        ObservableList<String> attr = tableView.getSelectionModel().getSelectedItem();
         Instance inst = new DenseInstance(data.numAttributes());
-
         inst.setDataset(data);
         for (int i = 0; i < data.numAttributes(); i++) {
             inst.setValue(i, attr.get(i));
         }
         data.add(inst);
-
 
 
         J48 tree = new J48();
@@ -179,7 +164,10 @@ public class Controller implements Initializable {
 
         int last = data.numInstances()-1;
         double pred = tree.classifyInstance(data.instance(last));
-        String result = "Valor predecido: " + data.classAttribute().value((int) pred) + "\n";
+        String prediccion = data.classAttribute().value((int) pred);
+        attr.add(prediccion);
+        tableView.getItems().add(attr);
+        String result = "Valor predecido: " + prediccion + "\n";
 
 
 //        StringBuilder result = new StringBuilder();
@@ -208,14 +196,18 @@ public class Controller implements Initializable {
 
     private void setComboBoxes(Instances data) {
 
+        ArrayList<Attribute> materia = new ArrayList<>();
+        for (int i = 0; i < data.numAttributes(); i++) {
+            materia.add(data.attribute(i));
+        }
 
-        Enumeration<Attribute> header = data.enumerateAttributes();
         ArrayList<String[]> materiaPrima= new ArrayList<>();
-        while (header.hasMoreElements()){
-            Attribute a = header.nextElement();
+        for (int i = 0; i < materia.size(); i++) {
+            Attribute a = materia.get(i);
             String[] op = new String[a.numValues()];
-            for (int i = 0; i < a.numValues(); i++)
-                op[i] = a.value(i);
+            for (int j = 0; j < a.numValues(); j++) {
+                op[j] = a.value(j);
+            }
             materiaPrima.add(op);
         }
 
@@ -224,12 +216,13 @@ public class Controller implements Initializable {
         cmbTemperature.getItems().clear();
         cmbHumidity.getItems().clear();
         cmbWindy.getItems().clear();
+        cmbPlay.getItems().clear();
 
         cmbOutlook.getItems().addAll(materiaPrima.get(0));
         cmbTemperature.getItems().addAll(materiaPrima.get(1));
         cmbHumidity.getItems().addAll(materiaPrima.get(2));
         cmbWindy.getItems().addAll(materiaPrima.get(3));
-        cmbPlay.getItems().addAll("yes","no");
+        cmbPlay.getItems().addAll(materiaPrima.get(4));
     }
 
     @Override
