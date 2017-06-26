@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -17,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.5" minHeight="466.0" minWidth="659.0" orientation="VERTICAL" prefHeight="466.0" prefWidth="659.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<SplitPane dividerPositions="0.5" minHeight="466.0" minWidth="659.0" orientation="VERTICAL" prefHeight="466.0" prefWidth="659.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <items>
       <VBox>
          <children>
@@ -40,36 +41,33 @@
                 </Menu>
               </menus>
             </MenuBar>
-            <HBox alignment="CENTER_LEFT" prefHeight="37.0" prefWidth="589.0" VBox.vgrow="NEVER">
+            <HBox alignment="CENTER_LEFT" prefHeight="37.0" prefWidth="589.0" spacing="5.0" VBox.vgrow="NEVER">
                <children>
                   <JFXButton fx:id="btnOpen" onAction="#handleButtonOpen" prefWidth="70.0" text="Open" textAlignment="CENTER">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </JFXButton>
-                  <Label fx:id="lblOpenedFile" alignment="CENTER" prefHeight="23.0" prefWidth="250.0" style="-fx-background-color: #d3d3d3;" text="Filename" textAlignment="CENTER" textFill="#616161">
-                     <padding>
-                        <Insets left="6.0" />
-                     </padding>
-                  </Label>
-                  <Label prefHeight="18.0" prefWidth="85.0" text="Algoritmo">
-                     <HBox.margin>
-                        <Insets left="8.0" />
-                     </HBox.margin>
-                  </Label>
-                  <JFXComboBox prefWidth="102.0" promptText="J48" />
-                  <JFXButton fx:id="btnClassify" disable="true" onAction="#handleButtonClassify" prefWidth="54.0" text="Apply" textAlignment="CENTER">
+                  <JFXTextField fx:id="txtFilepath" editable="false" prefHeight="25.0" prefWidth="290.0" promptText="File path">
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor></JFXTextField>
+                  <JFXComboBox prefHeight="25.0" prefWidth="196.0" promptText="J48" />
+                  <JFXButton fx:id="btnClassify" disable="true" onAction="#handleButtonClassify" prefWidth="54.0" style="-fx-background-color: #ff3333;" text="Apply" textAlignment="CENTER" textFill="WHITE">
                      <HBox.margin>
                         <Insets left="3.0" />
                      </HBox.margin>
                   </JFXButton>
                </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
             </HBox>
             <TableView fx:id="tableView" prefHeight="104.0" prefWidth="589.0" />
             <GridPane prefWidth="589.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -111,7 +109,7 @@
                   <Label text="High" GridPane.columnIndex="2" />
                   <Label text="False" GridPane.columnIndex="3" />
                   <Label text="Yes" GridPane.columnIndex="4" />
-                  <JFXButton fx:id="btnAgregar" onAction="#handleButtonAgregar" style="-fx-background-color: #35a1f4;" text="Agregar" textFill="WHITE" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                  <JFXButton fx:id="btnAgregar" disable="true" onAction="#handleButtonAgregar" style="-fx-background-color: #35a1f4;" text="Agregar" textFill="WHITE" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets left="4.0" top="3.0" />
                      </GridPane.margin>

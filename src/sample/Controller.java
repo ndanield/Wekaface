@@ -25,6 +25,9 @@ public class Controller implements Initializable {
     private Button btnClassify = new Button();
 
     @FXML
+    private JFXTextField txtFilepath = new JFXTextField();
+
+    @FXML
     private Button btnOpen = new Button();
 
     @FXML
@@ -82,10 +85,11 @@ public class Controller implements Initializable {
     @FXML
     private void handleButtonOpen() throws Exception {
         btnClassify.setDisable(false);
+        btnAgregar.setDisable(false);
 
 
         File file = fileChooser.showOpenDialog(btnClassify.getScene().getWindow());
-        lblOpenedFile.setText(file.getName());
+        txtFilepath.setText(file.getName());
         String filePath = file.getAbsolutePath();
 
         DataSource source = new DataSource(filePath);
