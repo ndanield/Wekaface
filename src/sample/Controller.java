@@ -41,9 +41,8 @@ public class Controller implements Initializable {
     @FXML
     private Label lblOpenedFile = new Label();
 
+    @FXML
     private final FileChooser fileChooser = new FileChooser();
-
-    ObservableList tablemodel = FXCollections.observableArrayList();
 
     @FXML
     private JFXTextField txtFilepath;
