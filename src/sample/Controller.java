@@ -1,6 +1,7 @@
 package sample;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -16,7 +17,7 @@ import weka.core.converters.ConverterUtils.DataSource;
 import weka.classifiers.trees.J48;
 import weka.classifiers.Evaluation;
 
-import java.io.File;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 
@@ -26,10 +27,10 @@ public class Controller implements Initializable {
     private Button btnClassify = new Button();
 
     @FXML
-    private JFXTextField txtFilepath = new JFXTextField();
+    private Button btnOpen = new Button();
 
     @FXML
-    private Button btnOpen = new Button();
+    private JFXButton btnOpen1;
 
     @FXML
     private TextArea resultArea = new TextArea();
@@ -45,35 +46,15 @@ public class Controller implements Initializable {
     ObservableList tablemodel = FXCollections.observableArrayList();
 
     @FXML
-    TableView<ObservableList<String>> tableView = new TableView<>();
-
-//controles de la instancia
+    private JFXTextField txtFilepath;
 
     @FXML
-    private JFXTextField rainyF;
+    private JFXTextField txtFilepath1;
 
     @FXML
-    private JFXTextField coolF;
+    private JFXCheckBox defaultset;
 
-    @FXML
-    private JFXTextField highF;
 
-    @FXML
-    private JFXTextField falseF;
-
-    @FXML
-    private JFXTextField yesF;
-
-    @FXML
-    private JFXComboBox<String> cmbOutlook;
-    @FXML
-    private JFXComboBox<String> cmbTemperature;
-    @FXML
-    private JFXComboBox<String> cmbHumidity;
-    @FXML
-    private JFXComboBox<String> cmbWindy;
-    @FXML
-    private JFXComboBox<String> cmbPlay;
 
 
 
@@ -85,95 +66,56 @@ public class Controller implements Initializable {
 
     @FXML
     private void handleButtonOpen() throws Exception {
-        btnClassify.setDisable(false);
-//        btnAgregar.setDisable(false);
-        if (tableView.getColumns() != null) {
-            tableView.getColumns().clear();
-        }
-        if (tableView.getItems() != null) {
-            tableView.getItems().clear();
-        }
 
-        File file = fileChooser.showOpenDialog(btnClassify.getScene().getWindow());
+        /*File file = fileChooser.showOpenDialog(btnClassify.getScene().getWindow());
         txtFilepath.setText(file.getName());
         String filePath = file.getAbsolutePath();
 
         DataSource source = new DataSource(filePath);
         data = source.getDataSet();
+*/
 
-        if (data.classIndex() == -1)
-            data.setClassIndex(data.numAttributes() - 1);
-
-        setComboBoxes(data);
-        int index;
-        for(index = 0; index < data.numAttributes()+1; index++) {
-            final int finalIdx = index;
-            TableColumn<ObservableList<String>, String> column = new TableColumn<>(
-                    (index != data.numAttributes()) ? data.attribute(finalIdx).name() : "Valor predicho"
-            );
-            column.setCellValueFactory(param ->
-                    new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx))
-            );
-            tableView.getColumns().add(column);
         }
-    }
+
 
     @FXML
     private void handleButtonClassify() {
-        try {
-            classify(data);
-        } catch (IllegalArgumentException e1) {
-            e1.getCause();
-        } catch (Exception e2) {
-            e2.printStackTrace();
+        try{
+
+            String prg = "import sys\nprint int(sys.argv[1])+int(sys.argv[2])\n";
+            BufferedWriter out = new BufferedWriter(new FileWriter("test1.py"));
+            out.write(prg);
+            out.close();
+            int number1 = 10;
+            int number2 = 32;
+            Process p = Runtime.getRuntime().exec("python test1.py "+number1+" "+number2);
+            BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            int ret = new Integer(in.readLine()).intValue();
+            System.out.println("value is : "+ret);
+        }
+
+        catch(Exception e){
+
         }
     }
 
+
     @FXML
     private void handleButtonAgregar() {
-        ObservableList<String> attr = FXCollections.observableArrayList(
-                cmbOutlook.getSelectionModel().getSelectedItem(),
-                cmbTemperature.getSelectionModel().getSelectedItem(),
-                cmbHumidity.getSelectionModel().getSelectedItem(),
-                cmbWindy.getSelectionModel().getSelectedItem(),
-                cmbPlay.getSelectionModel().getSelectedItem()
-        );
 
-        tableView.getItems().add(attr);
     }
 
     private void classify(Instances data) throws Exception {
 
 
-//        ObservableList<String> attr = tableView.getSelectionModel().getSelectedItem();
-        ObservableList<String> attr = FXCollections.observableArrayList(
-                cmbOutlook.getSelectionModel().getSelectedItem(),
-                cmbTemperature.getSelectionModel().getSelectedItem(),
-                cmbHumidity.getSelectionModel().getSelectedItem(),
-                cmbWindy.getSelectionModel().getSelectedItem(),
-                cmbPlay.getSelectionModel().getSelectedItem()
-        );
-
-        Instance inst = new DenseInstance(data.numAttributes());
+//
+        /*nstance inst = new DenseInstance(data.numAttributes());
         inst.setDataset(data);
         for (int i = 0; i < data.numAttributes(); i++) {
             inst.setValue(i, attr.get(i));
         }
         data.add(inst);
-
-
-        J48 tree = new J48();
-        tree.buildClassifier(data);
-        Evaluation eval = new Evaluation(data);
-        eval.crossValidateModel(tree, data, 10, new Random(1));
-
-        int last = data.numInstances()-1;
-        double pred = tree.classifyInstance(data.instance(last));
-        String prediccion = data.classAttribute().value((int) pred);
-        attr.add(prediccion);
-        tableView.getItems().add(attr);
-        String result = "Valor predecido: " + prediccion + "\n";
-
+*/
 
 //        StringBuilder result = new StringBuilder();
 //        for (int i = 0; i < data.numInstances(); i++) {
@@ -196,7 +138,7 @@ public class Controller implements Initializable {
   */
 
 //        resultArea.setText(result.toString());
-        txtResult.setText(result);
+//           txtResult.setText(result);
     }
 
     private void setComboBoxes(Instances data) {
@@ -216,18 +158,6 @@ public class Controller implements Initializable {
             materiaPrima.add(op);
         }
 
-
-        cmbOutlook.getItems().clear();
-        cmbTemperature.getItems().clear();
-        cmbHumidity.getItems().clear();
-        cmbWindy.getItems().clear();
-        cmbPlay.getItems().clear();
-
-        cmbOutlook.getItems().addAll(materiaPrima.get(0));
-        cmbTemperature.getItems().addAll(materiaPrima.get(1));
-        cmbHumidity.getItems().addAll(materiaPrima.get(2));
-        cmbWindy.getItems().addAll(materiaPrima.get(3));
-        cmbPlay.getItems().addAll(materiaPrima.get(4));
     }
 
     @Override

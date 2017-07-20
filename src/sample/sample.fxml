@@ -1,97 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.gluonhq.charm.glisten.control.ProgressIndicator?>
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.5" minHeight="466.0" minWidth="659.0" orientation="VERTICAL" prefHeight="466.0" prefWidth="659.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<SplitPane centerShape="false" dividerPositions="0.5551378446115288" minHeight="400.0" minWidth="659.0" prefWidth="800.0" scaleShape="false" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <items>
-      <VBox>
+      <VBox prefHeight="180.0" prefWidth="657.0">
          <children>
-            <MenuBar VBox.vgrow="NEVER">
-              <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
-                  </items>
-                </Menu>
-              </menus>
-            </MenuBar>
-            <HBox alignment="CENTER_LEFT" prefHeight="37.0" spacing="5.0" style="-fx-padding: 6;" VBox.vgrow="NEVER">
+            <HBox alignment="CENTER_RIGHT" prefHeight="37.0" spacing="5.0" style="-fx-padding: 6;" VBox.vgrow="NEVER">
                <children>
-                  <JFXButton fx:id="btnOpen" maxWidth="103.0" onAction="#handleButtonOpen" prefHeight="25.0" prefWidth="103.0" text="Open" textAlignment="CENTER">
+                  <JFXButton id="btnOpen" fx:id="btnOpen" maxWidth="169.0" onAction="#handleButtonOpen" prefHeight="25.0" prefWidth="103.0" text="Open" textAlignment="CENTER">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXTextField fx:id="txtFilepath" editable="false" minWidth="250.0" promptText="File path" HBox.hgrow="ALWAYS">
+                  <JFXTextField fx:id="txtFilepath" editable="false" minWidth="250.0" prefHeight="36.0" promptText="Cargar imagen" HBox.hgrow="ALWAYS">
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
-                     </cursor></JFXTextField>
-                  <JFXComboBox minWidth="196.0" prefHeight="25.0" prefWidth="156.0" promptText="J48" />
-                  <JFXButton fx:id="btnClassify" buttonType="RAISED" disable="true" maxWidth="135.0" onAction="#handleButtonClassify" prefWidth="135.0" style="-fx-background-color: #800080;" text="Add &amp; Apply" textAlignment="CENTER" textFill="WHITE">
-                     <HBox.margin>
-                        <Insets left="3.0" />
-                     </HBox.margin>
-                  </JFXButton>
+                     </cursor>
+                  </JFXTextField>
                </children>
                <VBox.margin>
-                  <Insets />
+                  <Insets top="10.0" />
                </VBox.margin>
             </HBox>
-            <TableView fx:id="tableView" prefHeight="179.0" prefWidth="657.0" />
-            <GridPane VBox.vgrow="NEVER">
+            <JFXCheckBox fx:id="defaultset" checkedColor="#90109c" nodeOrientation="LEFT_TO_RIGHT" prefHeight="20.0" prefWidth="429.0" text="Usar default training set">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
+            </JFXCheckBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <JFXComboBox fx:id="cmbOutlook" maxWidth="1.7976931348623157E308" minWidth="100.0" GridPane.halignment="CENTER" />
-                  <JFXComboBox fx:id="cmbPlay" maxWidth="1.7976931348623157E308" minWidth="100.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
-                  <JFXComboBox fx:id="cmbWindy" maxWidth="1.7976931348623157E308" minWidth="100.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" />
-                  <JFXComboBox fx:id="cmbHumidity" maxWidth="1.7976931348623157E308" minWidth="100.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-                  <JFXButton fx:id="btnAgregar" disable="true" minWidth="60.0" onAction="#handleButtonAgregar" prefHeight="25.0" style="-fx-background-color: #35a1f4;" text="Agregar" textFill="WHITE" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" />
-                  <JFXComboBox fx:id="cmbTemperature" maxWidth="1.7976931348623157E308" minWidth="100.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                  <JFXButton id="btnOpen2" fx:id="btnOpen1" maxWidth="169.0" onAction="#handleButtonOpen" prefHeight="25.0" prefWidth="103.0" text="Open" textAlignment="CENTER" />
+                  <JFXTextField fx:id="txtFilepath1" editable="false" minWidth="250.0" prefHeight="36.0" promptText="Cargar imagen" HBox.hgrow="ALWAYS">
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </JFXTextField>
                </children>
-            </GridPane>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </HBox>
+            <JFXButton id="btnClassify" fx:id="btnClassify" alignment="BOTTOM_CENTER" buttonType="RAISED" disable="true" maxWidth="445.0" onAction="#handleButtonClassify" prefHeight="25.0" prefWidth="445.0" ripplerFill="#7f67eb" style="-fx-background-color: #800080;" text=" Apply" textAlignment="CENTER" textFill="WHITE" />
          </children>
       </VBox>
-      <JFXTextField fx:id="txtResult" alignment="CENTER" editable="false" maxHeight="171.0" prefHeight="171.0" prefWidth="657.0" promptText="Nada agregado">
-         <font>
-            <Font size="40.0" />
-         </font></JFXTextField>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <JFXTextField fx:id="txtResult" alignment="CENTER" editable="false" maxHeight="256.0" prefHeight="250.0" prefWidth="112.0" promptText="Resultado">
+               <font>
+                  <Font size="40.0" />
+               </font>
+            </JFXTextField>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <ProgressIndicator opacity="0.46" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
    </items>
 </SplitPane>
